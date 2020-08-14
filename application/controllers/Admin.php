@@ -2612,9 +2612,13 @@ $err = curl_error($curl);
 curl_close($curl);
  
 if ($err) {
-  echo "cURL Error #:" . $err;
+  echo "<script>alert('".$err."');</script>";
+
 } else {
-  echo $response;
+ //echo $response;
+  if (strpos($response, 'Exceeded') !== false) {
+     echo "<script>alert('Please try after sometime!Limit On Maximum Number Of Requests Exceeded');</script>";
+	}
 	}
 
 	return $response;
