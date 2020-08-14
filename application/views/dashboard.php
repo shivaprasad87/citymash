@@ -874,11 +874,7 @@
         </div>
     <?php }?>
 												    
-												</div>
-									
-									</div>
-									<?php
-								}?>
+									 
 <!--/tabs-->
 										<div class="tab-main">
 											 <!--/tabs-inner-->

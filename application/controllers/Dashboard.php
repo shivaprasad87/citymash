@@ -157,6 +157,35 @@ class Dashboard extends CI_Controller {
             # code...
         }
         else{
+            $fromDate='';
+        $toDate='';
+        $dept='';
+        $city='';
+        $project='';
+        $callbacks = $this->callback_model->generate_report_data($fromDate,$toDate,$dept,$city,'lead',$project);
+        $this->session->set_userdata("report-heading","Lead breakup report");
+                    $advisors = array();
+                    $projects = array();
+                    $lead_sources = array();
+                    foreach ($callbacks as $callback) {
+                        if(array_key_exists($callback->user_id, $advisors))
+                            $advisors[$callback->user_id] += 1;
+                        else
+                            $advisors[$callback->user_id] = 1;
+                        if(array_key_exists($callback->project_id, $projects))
+                            $projects[$callback->project_id] += 1;
+                        else
+                            $projects[$callback->project_id] = 1;
+                        if(array_key_exists($callback->lead_source_id, $lead_sources))
+                            $lead_sources[$callback->lead_source_id] += 1;
+                        else
+                            $lead_sources[$callback->lead_source_id] = 1;
+                    }
+            $data['advisors'] = $advisors;
+            $data['projects'] = $projects;
+            $data['lead_sources'] = $lead_sources;
+            $data['view_page'] = 'reports/lead_report';
+            $data['mail_template'] = 'mail/lead_report';
             $data['productivity_report'] = $this->callback_model->get_call_reports();
             $data['overdue_lead_count'] = $this->callback_model->get_overdue_lead_count();
             $data['today_callback_count'] = $this->callback_model->fetch_callback_count(null,'today');
