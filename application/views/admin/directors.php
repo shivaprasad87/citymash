@@ -5,6 +5,7 @@
     else
         $this->load->view('inc/header');    
 ?>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <body>
      <div class="se-pre-con"></div>
    <div class="page-container">

@@ -81,7 +81,81 @@
 								<!--custom-widgets-->
 												<div class="custom-widgets">
 													<?php 
-													
+													if($this->session->userdata('user_type')=="director")
+													{
+														?>
+														                   <div class="row-one">
+    <?php
+        $fromDate='';
+        $toDate='';
+        $dept='';
+        $city='';
+        $project=''; 
+        if(count($lead_sources)>0){
+                        $i = 1;
+                        $total = 0;
+                        $class_val ='';
+                        foreach ($lead_sources as $key => $value) { 
+                            $name = $this->common_model->get_leadsource_name($key);
+                            $total += $value;
+                            
+
+                            if($i==1)
+                                $class_val ='col-md-3 widget';
+                            elseif($i==2)
+                                $class_val ='col-md-3 widget states-mdl';
+                            elseif($i==3)
+                                $class_val ='col-md-3 widget states-thrd';
+                            else    
+                            $class_val ='col-md-3 widget states-last';                        
+                            if($i%2!=0) 
+                                {?>
+                                                         
+                                                        <div class="<?=$class_val?>">
+                                                            <div class="stats-left">
+                                                                <h5>lead Source</h5>
+                                                                <h4><?php echo $name; ?></h4>
+                                                            </div>
+                                                            <div class="stats-right">
+                                                                <label><a href="<?php echo base_url().'view_callbacks?report='.urlencode('lead').'&lead_source='.urlencode($key).'&dept='.urlencode($dept).'&fromDate='.urlencode($fromDate).'&toDate='.urlencode($toDate); ?>"><?php echo $value; ?></a></label>
+                                                            </div>
+                                                            <div class="clearfix"> </div>   
+                                                        </div>
+                                                        <?php
+                                                    }
+                                                    else
+                                                    {
+                                                       ?>
+                                                       <div class="<?=$class_val?>">
+                                                            <div class="stats-left">
+                                                                <h5>lead Source</h5>
+                                                                <h4><?php echo $name; ?></h4>
+                                                            </div>
+                                                            <div class="stats-right">
+                                                                <label><a href="<?php echo base_url().'view_callbacks?report='.urlencode('lead').'&lead_source='.urlencode($key).'&dept='.urlencode($dept).'&fromDate='.urlencode($fromDate).'&toDate='.urlencode($toDate); ?>"><?php echo $value; ?></a></label>
+                                                            </div>
+                                                            <div class="clearfix"> </div>   
+                                                        </div>
+                                                       <?php 
+                                                    }
+                                                     $i++;
+                                                    if($i==5)
+                                                    {
+                                                        $i=1;echo "</div><div class='clearfix'> </div> <br><div class='row-one'>";
+                                                    }
+                                                    
+                                                    }
+                                                   
+                                                }
+                                                    ?>
+                                                    
+                                                        <div class="clearfix"> </div>   
+                                                    </div>
+                                                    <br>
+                                               
+                                                <?php }
+                                               
+													}
 													if ($this->session->userdata('user_type')=="user") { 
        												?>
        												

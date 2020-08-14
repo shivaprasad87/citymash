@@ -122,13 +122,31 @@
                                                     </div>
                                                     <br>
                                                     <div class="row-one">
-    <?php
-        $fromDate='';
+                                                        
+                                                      <!--   <div class="col-md-3 widget states-mdl">
+                                                            <div class="stats-left">
+                                                                <h5>Lead Source callbacks</h5>
+                                                                <h4>count</h4>
+                                                            </div>
+                                                            <div class="stats-right">
+                                                                <label><a href="<?=base_url('admin/lead_report_table');?>"><?php  $fromDate='';
         $toDate='';
         $dept='';
         $city='';
-        $project=''; 
-        if(count($lead_sources)>0){
+        $project='';
+        $callbacks = count($this->callback_model->generate_report_data($fromDate,$toDate,$dept,$city,'lead',$project));
+        echo $callbacks;
+        ?></a> </label>
+                                                            </div>
+                                                            <div class="clearfix"> </div>   
+                                                        </div>
+ -->
+                                                      <?php
+                    $fromDate='';
+        $toDate='';
+        $dept='';
+        $city='';
+        $project=''; if(count($lead_sources)>0){
                         $i = 1;
                         $total = 0;
                         $class_val ='';

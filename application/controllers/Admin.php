@@ -33,6 +33,35 @@ class Admin extends CI_Controller {
         $data['profile_pic'] = json_decode( json_encode($data['profile_pic']), true);
         $data['active_count'] = $this->user_model->get_live_feed_back();
         $this->session->set_userdata('profile_pic',$data['profile_pic'][0]['profile_pic']);
+        $fromDate='';
+        $toDate='';
+        $dept='';
+        $city='';
+        $project='';
+        $callbacks = $this->callback_model->generate_report_data($fromDate,$toDate,$dept,$city,'lead',$project);
+        $this->session->set_userdata("report-heading","Lead breakup report");
+					$advisors = array();
+					$projects = array();
+					$lead_sources = array();
+					foreach ($callbacks as $callback) {
+						if(array_key_exists($callback->user_id, $advisors))
+							$advisors[$callback->user_id] += 1;
+						else
+							$advisors[$callback->user_id] = 1;
+						if(array_key_exists($callback->project_id, $projects))
+							$projects[$callback->project_id] += 1;
+						else
+							$projects[$callback->project_id] = 1;
+						if(array_key_exists($callback->lead_source_id, $lead_sources))
+							$lead_sources[$callback->lead_source_id] += 1;
+						else
+							$lead_sources[$callback->lead_source_id] = 1;
+					}
+					$data['advisors'] = $advisors;
+					$data['projects'] = $projects;
+					$data['lead_sources'] = $lead_sources;
+					$data['view_page'] = 'reports/lead_report';
+					$data['mail_template'] = 'mail/lead_report';
 		$this->load->view('admin/home',$data);
 
 	}
@@ -2378,7 +2407,7 @@ $customer_req = array(
 	}
 
 		public function fetch_99acre_online_leads(){
-		$url =  "https://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/";
+		$url =  "http://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/";
 		//$data = $this->common_model->load_l_s_credentials('99acre');
 		//print_r($data);die;
 		$username = 'city.99';
@@ -2388,7 +2417,6 @@ $customer_req = array(
 		$request = "<?xml version='1.0'?><query><user_name>$username</user_name><pswd>$password</pswd><start_date>$start_date</start_date><end_date>$end_date</end_date></query>";
 		$allParams = array('xml'=>$request);
 		$leads = $this->get99AcresLeads();
-		//print_r($leads); die;
 		$data=array();
 		$i=0;
 		if(!empty($leads))
@@ -2434,6 +2462,27 @@ $customer_req = array(
 		}
 		
 		
+	}
+	public function fetch_quicker_online_leads($value='')
+	{
+		$qdp=new QDPServiceImpl();
+		$token=new Token();
+		$properties_array = array("host"=>base_url(),"appId"=>"123","secretKey"=>"kc6at8ng63kmoj097945p8ixkr3lpzx3",
+		"email"=> "mayank.citymash@gmail.com"
+		);
+		$qdp->init($properties_array);
+		$qdp->getInstance();
+		$token=$qdp->getToken();
+		$array = $qdp->getAuthHeaders($token);
+		echo "{";
+		foreach($array as $x => $x_value) {
+		echo $x . " = " . $x_value;
+		if ($x == 'X-Quikr-Signature-v2'){
+		break;
+		}
+		echo " , ";
+		}
+		echo "}\n";
 	}
 
 
@@ -2539,7 +2588,10 @@ $customer_req = array(
 
 	function get99AcresLeads(){
 		$curl = curl_init();
- 
+		$username = 'city.99';
+		$password = 'Shashank1986';
+ $start_date = date("Y-m-d 00:00:00", strtotime('-1 days'));
+		$end_date = date("Y-m-d 23:59:59"); 
 curl_setopt_array($curl, array(
   CURLOPT_URL => "http://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/",
   CURLOPT_RETURNTRANSFER => true,
@@ -2548,16 +2600,15 @@ curl_setopt_array($curl, array(
   CURLOPT_TIMEOUT => 30,
   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
   CURLOPT_CUSTOMREQUEST => "POST",
-  CURLOPT_POSTFIELDS => "xml=<?xml version='1.0'?><query><user_name>countryside99</user_name><pswd>ind123</pswd><start_date>2020-02-12 00:00:00</start_date><end_date>2020-02-13 23:59:59</end_date></query>",
+  CURLOPT_POSTFIELDS => "xml=<?xml version='1.0'?><query><user_name>$username</user_name><pswd>$password</pswd><start_date>$start_date</start_date><end_date>$end_date</end_date></query>",
   CURLOPT_HTTPHEADER => array( 
     "content-type: application/x-www-form-urlencoded",
   ),
 ));
  
 $response = curl_exec($curl);
-		$info = curl_getinfo($curl);
+$info = curl_getinfo($curl);
 $err = curl_error($curl);
- 
 curl_close($curl);
  
 if ($err) {
@@ -2566,7 +2617,7 @@ if ($err) {
   echo $response;
 	}
 
-	return $info;
+	return $response;
 }
 	function dead_leads_reassign(){
 		if($this->input->post('chkValues')) {
