@@ -325,7 +325,7 @@
 		</div>
 	
 
-		<div class="row">
+		<div class="row col-sm-12">
 			<div class="col-sm-6 col-sm-offset-3">
 					<div class="page-header text-center">
 						<h1>Default Callback Assignment</h1>
@@ -342,7 +342,7 @@
 							</select>
 						</div>
 					</div>
-
+					<div class="clearfix"></div>
 					<div class="form-group">
 						<label for="email" class="control-label col-sm-3">Callback type*</label>
 						<div class="col-sm-9">
@@ -354,7 +354,7 @@
 							</select>
 						</div>
 					</div>
-
+					<div class="clearfix"></div>
 					<div class="form-group">
 						<label for="email" class="control-label col-sm-3">Assigned to*</label>
 						<div class="col-sm-9">
@@ -383,7 +383,7 @@
 							</select>
 						</div>
 					</div>
-
+					<div class="clearfix"></div>
 					<div class="form-group">
 						<label for="email" class="control-label col-sm-3">Broker*</label>
 						<div class="col-sm-9">
@@ -395,7 +395,7 @@
 							</select>
 						</div>
 					</div>
-
+					<div class="clearfix"></div>
 					<div class="form-group">
 						<label for="email" class="control-label col-sm-3">Status*</label>
 						<div class="col-sm-9">
@@ -407,21 +407,21 @@
 							</select>
 						</div>
 					</div>
-
+					<div class="clearfix"></div>
 					<div class="form-group">
 						<label for="email" class="control-label col-sm-3">Due Date*</label>
 						<div class="col-sm-9">
 							<input type="date" id="dt" class="form-control" name="due_date" required />
 						</div>
 					</div>
-
+					<div class="clearfix"></div>
 					<div class="form-group">
 						<label for="email" class="control-label col-sm-3">Due Time*</label>
 						<div class="col-sm-9">
 							<input type="time" id="dt" class="form-control" name="due_time" value="00:00"/>
 						</div>
 					</div>
-
+					<div class="clearfix"></div>
 					<div class="form-group">
 						<div class="col-sm-offset-3">&nbsp;</div>
 						<div class="col-sm-9">
