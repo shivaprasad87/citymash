@@ -2465,24 +2465,59 @@ $customer_req = array(
 	}
 	public function fetch_quicker_online_leads($value='')
 	{
+		$leads = $this->getquickrleads();
+		$leads = json_decode(json_encode(json_decode($leads),true));
+		$leads = json_decode(json_encode($leads->data), true);
+		//print_r($leads);die;
+		$this->common_model->save_online_leads_quickr($leads);
+		$data['name'] ="more";
+		$data['heading'] ="Quickr Online Callbacks";
+		$rowCount 				= $this->common_model->count_onlineleads('online_leads','Quickr');
+			$data["totalRecords"] 	= $rowCount;
+			$data["links"] 			= paginitaionWithQueryString(base_url().'admin/fetch_quicker_online_leads/', 3, VIEW_PER_PAGE, $rowCount, $this->input->get());
+			//print_r($data["links"])	
+			$page = $this->uri->segment(3);
+	        $offset = !$page ? 0 : $page;
+			//------ End --------------
+			// $data['result'] = $this->callback_model->getCallbackLists($clause, $offset, VIEW_PER_PAGE);
+		$data['leads'] = $this->common_model->get_online_leads('online_leads','Quickr',VIEW_PER_PAGE,$offset);
+		if (empty($data['leads'])) {
+			$data['name'] = "index";
+     echo "<script>alert('no leads in Quickr');</script>";
+     $this->load->view('admin/online_leads',$data);
+		}
+		else
+		{ 
+		$this->load->view('admin/online_leads',$data);
+		}
+	} 
+	function getquickrleads($value='')
+	{
 		$qdp=new QDPServiceImpl();
 		$token=new Token();
-		$properties_array = array("host"=>base_url(),"appId"=>"123","secretKey"=>"kc6at8ng63kmoj097945p8ixkr3lpzx3",
-		"email"=> "mayank.citymash@gmail.com"
-		);
+		
+$properties_array = array("host"=>'https://api.quikr.com',"appId"=>"1440","secretKey"=>"9e23dca2a6d30b727faf83f90712f141","email"=> "mayank.citymash@gmail.com");
 		$qdp->init($properties_array);
 		$qdp->getInstance();
 		$token=$qdp->getToken();
 		$array = $qdp->getAuthHeaders($token);
-		echo "{";
-		foreach($array as $x => $x_value) {
-		echo $x . " = " . $x_value;
+		$a=array();  
+		foreach($array as $x => $x_value) { 
+			array_push($a,$x . ":" . $x_value); 
 		if ($x == 'X-Quikr-Signature-v2'){
 		break;
-		}
-		echo " , ";
-		}
-		echo "}\n";
+		} 
+		}  
+		$second_array = array("Content-Type:application/json","Host:api.quikr.com","cache-control:no-cache,no-cache");
+		$start_date=date("Y-m-d", strtotime('yesterday'));
+		$end_date =  date("Y-m-d", strtotime(date("y-m-d")));
+		$url ="https://api.quikr.com/realestate/v1/getLeadSharedDetails?key=kc6at8ng63kmoj097945p8ixkr3lpzx3&startDate=".$start_date."&endDate=".$end_date."&startTime=00:00:00&endTIme=23:59:59";
+		 			$crl = curl_init($url);
+					curl_setopt($crl, CURLOPT_HTTPHEADER,array_merge($a,$second_array));
+					curl_setopt($crl, CURLOPT_HEADER, 0);
+					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+					$leads=curl_exec ($crl);
+					return $leads;
 	}
 
 
@@ -2520,6 +2555,12 @@ $customer_req = array(
 				$p_id=$this->common_model->get_project_id_by_name($lead_data->project,3);
 				if($p_id=='')
 					$p_id['id']=3;
+				}
+				elseif($lead_data->source=='Quickr')
+				{
+				$p_id=$this->common_model->get_project_id_by_name($lead_data->project,3);
+				if($p_id=='')
+					$p_id['id']=4;
 				}
 				else
 				{
@@ -2574,6 +2615,11 @@ $customer_req = array(
 				elseif($data['lead_source_id']==32)
 				{
 					$ext="commonfloor_leads";
+					$this->session->set_userdata('ext',$ext);
+				}
+				elseif($data['lead_source_id']==31)
+				{
+					$ext="fetch_quicker_online_leads";
 					$this->session->set_userdata('ext',$ext);
 				}
 				//echo site_url()

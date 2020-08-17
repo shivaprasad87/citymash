@@ -137,6 +137,9 @@
 	elseif ($source_name=='commonfloor_leads') {
 		$source_name='commonfloor';
 	}
+	elseif ($source_name=='fetch_quicker_online_leads') {
+		$source_name='Quickr';
+	}
 			$today_leads="";
 			$Yestreday_leads="";
 			$total_leads="";

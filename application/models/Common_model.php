@@ -416,9 +416,6 @@ class Common_model extends MY_Model {
                         $notes=$leads['notes'];
                         $lead_date=$leads['lead_date'];
                         $project_id=$leads['leadid'];
-
-                        
-
                          $query1="select count(*) as count from online_leads where phone='$phone '";
                             $usercount=  $this->db->query($query1);
                             if ( $usercount->num_rows() > 0 )
@@ -440,10 +437,53 @@ class Common_model extends MY_Model {
                                   }
                               }
                              }
-                             $i++;
-                       
+                             $i++;  
                     }
+            }
+        }
+        function save_online_leads_quickr($temp)
+            {
+                if(!empty($temp))
+                {
+                    $source="Quickr";
 
+                    $i=0;
+                    foreach ($temp as $leads) { 
+                        $date_1 = explode('/',$leads['createddatetime'] );
+                        $date_1 =$date_1[2]."-".$date_1[1]."-".$date_1[0]; 
+                        $phone =$leads['mobile'];
+                        $name=$leads['name'];
+                        $mobile=$leads['mobile'];
+                        $email=$leads['email'];
+                        $projectname=$leads['locality']." Location";
+                        $id=$leads['transactionId'];
+                        $lead_date=$date_1;
+                        $notes=$leads['notes'];
+                        $lead_date=$date_1;
+                        $project_id=$leads['transactionId'];
+                         $query1="select count(*) as count from online_leads where phone='$phone '";
+                            $usercount=  $this->db->query($query1);
+                            if ( $usercount->num_rows() > 0 )
+                             {
+                              $row = $usercount->row_array();
+                            //  print_r($row);
+                              $userscount= $row['count'];
+                              {
+                                $bid=1;
+                                  if($userscount<=0 && $name!='')
+                                  {
+                                    if(!empty($projectname))
+                                    $this->insert_newproject($projectname,$bid);
+                                else
+                                    $this->insert_newproject('Quickr',$bid);
+                              $query="insert into online_leads(source,name,phone,email,project,leadid,notes,lead_date,project_id) values('$source','$name','$mobile','$email','$projectname','$id','$notes','$lead_date','$project_id')";
+                                $this->db->query($query);
+
+                                  }
+                              }
+                             }
+                             $i++;  
+                    }
             }
         }
 
