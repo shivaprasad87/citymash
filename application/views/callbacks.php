@@ -367,8 +367,9 @@
                     <th class="priority-3">Contact No</th>
                     <th class="priority-4">Email</th>
                     <th class="priority-5">Project</th>
+                    <th class="priority-13">Lead Source</th>
                     <?php if($this->session->userdata("user_type")!="user") { ?>
-                        <th class="priority-13">Lead Source</th>
+                        
                         <th class="priority-14">Lead Id</th> 
                     <?php } ?>
                     <th class="priority-6">Advisor</th>
@@ -395,8 +396,9 @@
                         <td class="priority-3"><?php echo $data->contact_no1 ?></td>
                         <td class="priority-4"><?php echo $data->email1; ?></td>
                         <td class="priority-5"><?php echo $data->project_name; ?></td>
+                        <td class="priority-13"><?php echo $data->lead_source_name; ?></td>
                         <?php if($this->session->userdata("user_type")!="user") { ?>
-                            <td class="priority-13"><?php echo $data->lead_source_name; ?></td>
+                            
                             <td class="priority-14"><?php echo $data->leadid; ?></td>
                         <?php } ?>
                         <td class="priority-6"><?php echo $data->user_name; ?></td>
