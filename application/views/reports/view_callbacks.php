@@ -229,6 +229,7 @@ else if(!empty($project))
                     <th style="word-wrap:break-word;" width="20%" >Lead Source</th>
                     <th>Sub Source</th>
                 <?php }else {?>
+                    
                     <th>Contact Name</th> 
                     <th>Contact No</th>
                     <th>Email</th>
@@ -237,6 +238,7 @@ else if(!empty($project))
                     <th>Lead Id</th> 
                     <th>Advisor</th> 
                     <!-- <th>Sub-Source</th> -->
+                    <th style="word-wrap:break-word;" width="20%" >Lead Source</th>
                     <th>Due date</th>
                     <th>Status</th>
                     <th>Date Added</th>
@@ -253,7 +255,10 @@ else if(!empty($project))
             if(count($result)>0){
             foreach ($result as $data) {
                 $duedate = explode(" ", $data->due_date);
-                $duedate = $duedate[0]; ?>
+                $duedate = $duedate[0];  
+                   $lead_source_name= $this->callback_model->get_leadsource_name($data->lead_source_id);
+                    $sub_source_name=$this->callback_model->get_broker_name($data->broker_id);
+                ?>
                 <tr id="row<?php echo $data->id; ?>" <?php if(strtotime($duedate)<strtotime('today')){?> class="highlight_past" <?php }elseif(strtotime($duedate) == strtotime('today')) {?> class="highlight_now" <?php }elseif(strtotime($duedate)>strtotime('today')){ ?> class="highlight_future" <?php } ?>>
                     <td><?php echo $i; ?></td>
                     <?php if(($report == 'lead') || ($report == 'lead_assignment') || ($report == 'site_visit') || ($report == 'clent_reg')){ ?>
@@ -273,16 +278,12 @@ else if(!empty($project))
                         <td><?php echo $data->project_name; ?></td>
                         <td><?php echo $data->notes; ?></td>
                 
-                <?php 
-
-                   // $this->db->model('Callback_model');
-                   $lead_source_name= $this->callback_model->get_leadsource_name($data->lead_source_id);
-                    $sub_source_name=$this->callback_model->get_broker_name($data->broker_id);
-                ?>
+               
 
                         <td><?php echo  $lead_source_name['name'];?></td>
                         <td><?php echo $sub_source_name['name']; ?></td>
                     <?php }else {?>
+                        
                         <td><?php echo $data->name; ?></td>
                         <td><?php echo $data->contact_no1 ?></td>
                         <td><?php echo $data->email1; ?></td>
@@ -290,6 +291,7 @@ else if(!empty($project))
                         <!-- <td><?php echo $data->lead_source_name; ?></td> -->
                         <td><?php echo $data->leadid; ?></td>
                         <td><?php echo $data->user_name; ?></td>
+                        <td><?php echo  $lead_source_name['name'];?></td>
                         <!-- <td><?php echo $data->broker_name; ?></td> -->
                         <td class="due_date"><?php echo $data->due_date; ?></td>
                         <td><?php echo $data->status_name; ?></td>
