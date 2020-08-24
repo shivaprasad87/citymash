@@ -238,7 +238,7 @@ else if(!empty($project))
                     <th>Lead Id</th> 
                     <th>Advisor</th> 
                     <!-- <th>Sub-Source</th> -->
-                    <th style="word-wrap:break-word;" width="20%" >Lead Source</th>
+                    <th>Lead Source</th>
                     <th>Due date</th>
                     <th>Status</th>
                     <th>Date Added</th>
