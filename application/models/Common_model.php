@@ -416,35 +416,35 @@ class Common_model extends MY_Model {
                         $notes=$leads['notes'];
                         $lead_date=$leads['lead_date'];
                         $project_id=$leads['leadid'];
-                        // $query1="select count(*) as count from online_leads where phone='$phone'";
-                        // $usercount=  $this->db->query($query1);
-                        $bid=1;
-                                if(!empty($projectname))
+                        $query1="select count(*) as count from online_leads where phone='$phone'";
+                        $usercount=  $this->db->query($query1);
+                        // $bid=1;
+                        //         if(!empty($projectname))
+                        //             $this->insert_newproject($projectname,$bid);
+                        //         else
+                        //             $this->insert_newproject('99acres',$bid);
+                        //       $query="insert into online_leads(source,name,phone,email,project,leadid,notes,lead_date,project_id) values('$source','$name','$mobile','$email','$projectname','$id','$notes','$lead_date','$project_id')";
+                        //         $this->db->query($query);
+
+                            if ( $usercount->num_rows() > 0 )
+                             {
+                              $row = $usercount->row_array();
+                            //  print_r($row);
+                              $userscount= $row['count'];
+                              {
+                                $bid=1;
+                                  if($userscount<=0 && $name!='')
+                                  {
+                                    if(!empty($projectname))
                                     $this->insert_newproject($projectname,$bid);
                                 else
                                     $this->insert_newproject('99acres',$bid);
                               $query="insert into online_leads(source,name,phone,email,project,leadid,notes,lead_date,project_id) values('$source','$name','$mobile','$email','$projectname','$id','$notes','$lead_date','$project_id')";
                                 $this->db->query($query);
 
-                            // if ( $usercount->num_rows() > 0 )
-                            //  {
-                            //   $row = $usercount->row_array();
-                            // //  print_r($row);
-                            //   $userscount= $row['count'];
-                            //   {
-                            //     $bid=1;
-                            //       if($userscount<=0 && $name!='')
-                            //       {
-                            //         if(!empty($projectname))
-                            //         $this->insert_newproject($projectname,$bid);
-                            //     else
-                            //         $this->insert_newproject('99acres',$bid);
-                            //   $query="insert into online_leads(source,name,phone,email,project,leadid,notes,lead_date,project_id) values('$source','$name','$mobile','$email','$projectname','$id','$notes','$lead_date','$project_id')";
-                            //     $this->db->query($query);
-
-                            //       }
-                            //   }
-                            //  }
+                                  }
+                              }
+                             }
                              $i++;  
                     }
             }
