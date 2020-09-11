@@ -340,7 +340,8 @@ class Common_model extends MY_Model {
      {
         $d=0;
         $this->db-> where('source',$lead_source)
-            ->where('saved',$d);
+            ->where('saved',$d)
+            ->order_by('id','desc');
 
            // ->order_by('name','asc');
         //$query=$this->db->get();
